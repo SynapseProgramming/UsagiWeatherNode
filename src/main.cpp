@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <Wifi.h>
 #include <HTTPClient.h>
+#include <string.h>
 // #include <Arduino_JSON.h>
 
 #define SEA_LEVEL_PRESSURE 1015.0f
@@ -69,10 +70,10 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
-  float temp = evnSensor->getTemperature();
-  uint32_t press = evnSensor->getPressure();
-  float alti = evnSensor->calAltitude(SEA_LEVEL_PRESSURE, press);
-  float humi = evnSensor->getHumidity();
+  double temp = evnSensor->getTemperature();
+  double press = evnSensor->getPressure();
+  double alti = evnSensor->calAltitude(SEA_LEVEL_PRESSURE, press);
+  double humi = evnSensor->getHumidity();
   Serial.println();
   Serial.println("======== start print ========");
   Serial.print("temperature (unit Celsius): ");
@@ -89,7 +90,18 @@ void loop()
   if (WiFi.status() == WL_CONNECTED)
   {
     http.begin(wific, server);
-    String data = "temp=45.33";
+    String data = "temp=";
+    String st_temp = String(temp, 5);
+    String st_press = String(press, 5);
+    String st_alti = String(alti, 5);
+    String st_humi = String(humi, 5);
+    data += st_temp;
+    data += "&press=";
+    data += st_press;
+    data += "&alt=";
+    data += st_alti;
+    data += "&humid=";
+    data += st_humi;
     http.POST(data);
     http.end();
   }
