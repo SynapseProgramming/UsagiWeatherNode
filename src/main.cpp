@@ -15,9 +15,9 @@ typedef DFRobot_BME280_IIC BME; // ******** use abbreviations instead of full na
 BME *evnSensor;
 TwoWire I2C = TwoWire(0);
 
-const char *ssid = "Owls Nest";
+const char *ssid = "RabbitNet";
 const char *pw = "gp8gp8gp8";
-const char *server = "http://192.168.50.119:5000/api/v1/weathers/create";
+const char *server = "http://192.168.1.119:5000/api/v1/weathers/create";
 
 WiFiClient wific;
 HTTPClient http;
@@ -104,5 +104,9 @@ void loop()
     data += st_humi;
     http.POST(data);
     http.end();
+  }
+  else
+  {
+    Serial.println("not connected!");
   }
 }
